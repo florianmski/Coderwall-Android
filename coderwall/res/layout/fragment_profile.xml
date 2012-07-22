@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" >
+
+            <ImageView
+                android:id="@+id/imageViewSpecial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutBusinessCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageViewSpecial"
+                android:layout_alignParentTop="true"
+                android:layout_margin="20dp"
+                android:background="@drawable/businesscard_bg"
+                android:padding="15dp" >
+
+                <ImageView
+                    android:id="@+id/imageViewProfile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp" />
+
+                <com.florianmski.coderwall.widgets.ScrollingTextView
+                    android:id="@+id/textViewName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageViewProfile"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Name"
+                    android:textColor="#FFF"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <com.florianmski.coderwall.widgets.ScrollingTextView
+                    android:id="@+id/textViewLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textViewName"
+                    android:layout_below="@+id/textViewName"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Location"
+                    android:textColor="#FFF" />
+
+                <com.florianmski.coderwall.widgets.ScrollingTextView
+                    android:id="@+id/textViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textViewLocation"
+                    android:layout_below="@+id/textViewLocation"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Title"
+                    android:textColor="#FFF" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relativeLayoutPicture"
+            android:padding="15dp" >
+
+            <TextView
+                android:id="@+id/textViewAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="About"
+                android:textColor="#000"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewEndorsements"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageViewEndorse"
+                android:layout_alignTop="@+id/imageViewEndorse"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/imageViewEndorse"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#000" />
+
+            <ImageView
+                android:id="@+id/imageViewEndorse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/endorse" />
+
+            <TextView
+                android:id="@+id/textViewAboutContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/textViewAbout"
+                android:text="About content"
+                android:textColor="#000" />
+
+            <ImageView
+                android:id="@+id/imageViewGithub"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignLeft="@+id/textViewAboutContent"
+                android:layout_below="@+id/textViewAboutContent"
+                android:background="@drawable/abs__item_background_holo_dark"
+                android:padding="10dp"
+                android:src="@drawable/social_github"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imageViewTwitter"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textViewAboutContent"
+                android:layout_toRightOf="@+id/imageViewGithub"
+                android:background="@drawable/abs__item_background_holo_dark"
+                android:padding="10dp"
+                android:src="@drawable/social_twitter"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar">
+        <!-- <item name="background">@android:color/white</item> -->
+        <!-- <item name="android:background">@android:color/white</item> -->
+    </style>
+
+    <style name="Theme.coderwall" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+<!--         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item> -->
+<!--         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item> -->
+<!--         <item name="android:windowBackground">@android:color/white</item> -->
+<!--         <item name="spinnerItemStyle">@android:style/Widget.Holo.TextView.SpinnerItem</item> -->
+    </style>
+
+</resources>
