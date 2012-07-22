@@ -8,6 +8,17 @@ This is an unofficial app.
 
 If you want to contribute, please do your pull on request on the dev branch.
 
+Libraries
+---------
+
+The following third party libraries were used in the app:
+
+* [coderwall-java](https://github.com/caseydunham/coderwall-java)
+* [Android-ViewPagerIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator)
+* [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock)
+* [otto](https://github.com/square/otto)
+* [androidquery](https://github.com/androidquery/androidquery)
+
 License
 -------
 
