@@ -6,6 +6,8 @@ This is the source code of my Coderwall Android app https://play.google.com/stor
 This app allows you to view profiles available on coderwall, it will evolves when the API will become more complete.
 This is an unofficial app.
 
+If you want to contribute, please do your pull on request on the dev branch.
+
 License
 -------
 
