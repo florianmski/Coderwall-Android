@@ -98,29 +98,32 @@ public class ProfileFragment extends BaseFragment
 		rlBusinessCard.startAnimation(AnimationUtils.makeInAnimation(getSherlockActivity(), false));
 		rlBusinessCard.setVisibility(View.VISIBLE);
 
-		if(u.getAccounts().getGithub() != null)
-			ivGithub.setVisibility(View.VISIBLE);
-
-		if(u.getAccounts().getTwitter() != null)
-			ivTwitter.setVisibility(View.VISIBLE);
-
-		ivGithub.setOnClickListener(new OnClickListener() 
+		if(u.getAccounts() != null)
 		{
-			@Override
-			public void onClick(View v) 
-			{
-				Utils.openBrowser(getSherlockActivity(), "http://www.github.com/" + u.getAccounts().getGithub());
-			}
-		});
+			if(u.getAccounts().getGithub() != null)
+				ivGithub.setVisibility(View.VISIBLE);
 
-		ivTwitter.setOnClickListener(new OnClickListener() 
-		{
-			@Override
-			public void onClick(View v) 
+			if(u.getAccounts().getTwitter() != null)
+				ivTwitter.setVisibility(View.VISIBLE);
+
+			ivGithub.setOnClickListener(new OnClickListener() 
 			{
-				Utils.openBrowser(getSherlockActivity(), "http://www.twitter.com/" + u.getAccounts().getTwitter());
-			}
-		});
+				@Override
+				public void onClick(View v) 
+				{
+					Utils.openBrowser(getSherlockActivity(), "http://www.github.com/" + u.getAccounts().getGithub());
+				}
+			});
+
+			ivTwitter.setOnClickListener(new OnClickListener() 
+			{
+				@Override
+				public void onClick(View v) 
+				{
+					Utils.openBrowser(getSherlockActivity(), "http://www.twitter.com/" + u.getAccounts().getTwitter());
+				}
+			});
+		}
 	}
 
 	@Override

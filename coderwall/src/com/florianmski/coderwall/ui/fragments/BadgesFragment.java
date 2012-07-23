@@ -36,10 +36,11 @@ public class BadgesFragment extends BaseFragment
 	public void onActivityCreated(Bundle savedInstanceState) 
 	{
 		super.onActivityCreated(savedInstanceState);
-		
+
 		CWUser u = (CWUser) getArguments().get(Constants.BUNDLE_USER);
 
-		lvBadges.setAdapter(new ListBadgesAdapter(getSherlockActivity(), new ArrayList<Badge>(u.getBadges())));		
+		if(u.getBadges() != null)
+			lvBadges.setAdapter(new ListBadgesAdapter(getSherlockActivity(), new ArrayList<Badge>(u.getBadges())));		
 	}
 
 	@Override
