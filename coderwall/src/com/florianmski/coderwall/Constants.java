@@ -9,6 +9,8 @@ public class Constants
 	
 	public final static String PREF_USERNAME = get("Username");
 	
+	public final static String CACHE_LEADERBOARD = "leaderboard.json";
+	
 	private final static String get(String text)
 	{
 		return PACKAGE_NAME + SEPARATOR + text;

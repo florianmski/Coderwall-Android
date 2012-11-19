@@ -5,10 +5,17 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.florianmski.coderwall.CWBus;
 
 public abstract class BaseFragment extends SherlockFragment
-{
+{	
+//	public SpiceManager getSpiceManager()
+//	{
+//		if(getActivity() instanceof BaseActivity)
+//			return ((BaseActivity)getActivity()).spiceManager;
+//		else
+//			throw new UnsupportedOperationException("To get a SpiceManager, your activity should extend BaseActivity.");
+//	}
+	
 	public void launchActivity(Class<?> activityToLaunch, Bundle args)
 	{
 		Intent i = new Intent(getActivity(), activityToLaunch);
@@ -47,15 +54,11 @@ public abstract class BaseFragment extends SherlockFragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-
-		CWBus.getInstance().register(this);
 	}
 
 	@Override
 	public void onDetach()
 	{
 		super.onDetach();
-
-		CWBus.getInstance().unregister(this);
 	}
 }

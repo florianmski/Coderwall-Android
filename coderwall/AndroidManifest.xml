@@ -18,13 +18,26 @@
 		android:name=".CWApplication"
         android:hardwareAccelerated="true">
         <activity
-            android:name=".ui.activities.UserActivity" >
+            android:name=".ui.activities.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".ui.activities.UserActivity" label="Profile" >
+        </activity>
+        
+        <activity
+            android:name=".ui.activities.LeaderboardActivity" label="Leaderboard" >
+        </activity>
+        
+        <activity
+            android:name=".ui.activities.TeamActivity" label="Team" >
+        </activity>
+    
     </application>
 
 </manifest>

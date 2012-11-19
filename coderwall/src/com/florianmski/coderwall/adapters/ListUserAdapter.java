@@ -2,7 +2,6 @@ package com.florianmski.coderwall.adapters;
 
 import java.util.List;
 
-import net.caseydunham.coderwall.data.User;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.androidquery.callback.BitmapAjaxCallback;
 import com.florianmski.coderwall.R;
 import com.florianmski.coderwall.Utils;
+import com.florianmski.coderwall.models.User;
 
 public class ListUserAdapter extends RootAdapter<User>
 {

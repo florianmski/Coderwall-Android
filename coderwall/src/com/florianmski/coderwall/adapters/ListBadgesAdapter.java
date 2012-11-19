@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import net.caseydunham.coderwall.data.Badge;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.format.DateFormat;
@@ -18,6 +17,7 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.callback.BitmapAjaxCallback;
 import com.florianmski.coderwall.R;
+import com.florianmski.coderwall.models.Badge;
 
 public class ListBadgesAdapter extends RootAdapter<Badge>
 {

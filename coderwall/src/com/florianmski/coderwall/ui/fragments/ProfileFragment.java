@@ -17,7 +17,7 @@ import com.androidquery.callback.BitmapAjaxCallback;
 import com.florianmski.coderwall.Constants;
 import com.florianmski.coderwall.R;
 import com.florianmski.coderwall.Utils;
-import com.florianmski.coderwall.models.CWUser;
+import com.florianmski.coderwall.models.User;
 
 public class ProfileFragment extends BaseFragment
 {
@@ -51,7 +51,7 @@ public class ProfileFragment extends BaseFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 
-		final CWUser u = (CWUser) getArguments().get(Constants.BUNDLE_USER);
+		final User u = (User) getArguments().get(Constants.BUNDLE_USER);
 		final String thumbnail = Utils.getThumbnail(u.getThumbnail(), 200);
 
 		final AQuery aq = new AQuery(getSherlockActivity());

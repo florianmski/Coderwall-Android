@@ -12,7 +12,7 @@ import android.widget.ListView;
 import com.florianmski.coderwall.Constants;
 import com.florianmski.coderwall.R;
 import com.florianmski.coderwall.adapters.ListAccomplishmentsAdapter;
-import com.florianmski.coderwall.models.CWUser;
+import com.florianmski.coderwall.models.User;
 
 public class AccomplishmentsFragment extends BaseFragment
 {
@@ -37,9 +37,9 @@ public class AccomplishmentsFragment extends BaseFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		
-		CWUser u = (CWUser) getArguments().get(Constants.BUNDLE_USER);
+		User u = (User) getArguments().get(Constants.BUNDLE_USER);
 
-		lvAccomplishments.setAdapter(new ListAccomplishmentsAdapter(getSherlockActivity(), new ArrayList<String>(Arrays.asList(u.getAccomplishments()))));		
+		lvAccomplishments.setAdapter(new ListAccomplishmentsAdapter(getSherlockActivity(), u.getAccomplishments()));		
 	}
 
 	@Override

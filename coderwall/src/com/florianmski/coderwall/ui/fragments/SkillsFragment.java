@@ -1,8 +1,5 @@
 package com.florianmski.coderwall.ui.fragments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +9,7 @@ import android.widget.ListView;
 import com.florianmski.coderwall.Constants;
 import com.florianmski.coderwall.R;
 import com.florianmski.coderwall.adapters.ListSkillsAdapter;
-import com.florianmski.coderwall.models.CWUser;
+import com.florianmski.coderwall.models.User;
 
 public class SkillsFragment extends BaseFragment
 {
@@ -37,9 +34,9 @@ public class SkillsFragment extends BaseFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		
-		CWUser u = (CWUser) getArguments().get(Constants.BUNDLE_USER);
+		User u = (User) getArguments().get(Constants.BUNDLE_USER);
 
-		lvSkills.setAdapter(new ListSkillsAdapter(getSherlockActivity(), new ArrayList<String>(Arrays.asList(u.getSpecialities()))));		
+		lvSkills.setAdapter(new ListSkillsAdapter(getSherlockActivity(), u.getSpecialities()));		
 	}
 
 	@Override

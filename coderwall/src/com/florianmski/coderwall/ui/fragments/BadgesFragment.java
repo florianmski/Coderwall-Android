@@ -2,7 +2,6 @@ package com.florianmski.coderwall.ui.fragments;
 
 import java.util.ArrayList;
 
-import net.caseydunham.coderwall.data.Badge;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,8 @@ import android.widget.ListView;
 import com.florianmski.coderwall.Constants;
 import com.florianmski.coderwall.R;
 import com.florianmski.coderwall.adapters.ListBadgesAdapter;
-import com.florianmski.coderwall.models.CWUser;
+import com.florianmski.coderwall.models.Badge;
+import com.florianmski.coderwall.models.User;
 
 public class BadgesFragment extends BaseFragment
 {
@@ -37,7 +37,7 @@ public class BadgesFragment extends BaseFragment
 	{
 		super.onActivityCreated(savedInstanceState);
 
-		CWUser u = (CWUser) getArguments().get(Constants.BUNDLE_USER);
+		User u = (User) getArguments().get(Constants.BUNDLE_USER);
 
 		if(u.getBadges() != null)
 			lvBadges.setAdapter(new ListBadgesAdapter(getSherlockActivity(), new ArrayList<Badge>(u.getBadges())));		

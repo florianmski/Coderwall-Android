@@ -7,3 +7,6 @@
 [submodule "libs/Java-API"]
 	path = libs/Java-API
 	url = https://github.com/florianmski/coderwall-java.git
+[submodule "libs/retrofit"]
+	path = libs/retrofit
+	url = https://github.com/square/retrofit.git

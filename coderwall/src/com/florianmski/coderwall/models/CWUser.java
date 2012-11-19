@@ -11,6 +11,8 @@ public class CWUser extends User implements Serializable
 	private String specialImage;
 	private String about;
 	
+	public CWUser() {}
+	
 	public CWUser(User u)	
 	{
 		this.setAccounts(u.getAccounts());

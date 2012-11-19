@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.androidquery.callback.BitmapAjaxCallback;
 import com.androidquery.util.AQUtility;
-import com.bugsense.trace.BugSenseHandler;
 
 public class CWApplication extends Application
 {
@@ -25,7 +24,8 @@ public class CWApplication extends Application
 		{
 		  InputStream inputStream = getAssets().open("bugsense.txt");
 		  String key = Utils.readInputStream(inputStream).trim();
-		  BugSenseHandler.setup(this, key);
+//		  BugSenseHandler.setup(this, key);
+		  //TODO
 		} 
 		catch (IOException e) 
 		{

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.florianmski.coderwall.Constants;
-import com.florianmski.coderwall.models.CWUser;
+import com.florianmski.coderwall.models.User;
 import com.florianmski.coderwall.ui.fragments.AccomplishmentsFragment;
 import com.florianmski.coderwall.ui.fragments.BadgesFragment;
 import com.florianmski.coderwall.ui.fragments.ProfileFragment;
@@ -18,7 +18,7 @@ public class PagerUserAdapter extends FragmentStatePagerAdapter
 
 	private Bundle args;
 
-	public PagerUserAdapter(FragmentManager fm, CWUser u) 
+	public PagerUserAdapter(FragmentManager fm, User u) 
 	{
 		super(fm);
 
@@ -26,7 +26,7 @@ public class PagerUserAdapter extends FragmentStatePagerAdapter
 		args.putSerializable(Constants.BUNDLE_USER, u);
 	}
 
-	public void refreshUser(CWUser u)
+	public void refreshUser(User u)
 	{
 		args.putSerializable(Constants.BUNDLE_USER, u);
 		this.notifyDataSetChanged();

@@ -1,68 +1,52 @@
 package com.florianmski.coderwall.ui.fragments;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.caseydunham.coderwall.data.User;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.florianmski.coderwall.AsyncLoader;
 import com.florianmski.coderwall.Constants;
 import com.florianmski.coderwall.R;
-import com.florianmski.coderwall.Utils;
-import com.florianmski.coderwall.adapters.ListUserAdapter;
 import com.florianmski.coderwall.adapters.PagerUserAdapter;
-import com.florianmski.coderwall.api.ApiCache;
-import com.florianmski.coderwall.api.CWManager;
-import com.florianmski.coderwall.events.UserRetrievedEvent;
-import com.florianmski.coderwall.models.CWUser;
-import com.florianmski.coderwall.tasks.GetUserProfileTask;
-import com.squareup.otto.Subscribe;
+import com.florianmski.coderwall.api.service.CoderwallApiProvider;
+import com.florianmski.coderwall.models.User;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitlePageIndicator.IndicatorStyle;
 
-public class UserFragment extends BaseFragment implements OnPageChangeListener
+public class UserFragment extends BaseFragment implements OnPageChangeListener, LoaderCallbacks<User>
 {
 	private TitlePageIndicator pageIndicator;
 	private ViewPager viewPager;
 
 	private PagerUserAdapter pagerAdapter;
-	private ListUserAdapter listAdapter;
 
-	private FrameLayout flProgress;
+	private MenuItem refreshItem;
 
-	private CWUser u;
+	private User u;
 	private String username;
-	private boolean refresh = false;
-
-	private GetUserProfileTask task;
 
 	public static UserFragment newInstance(Bundle args)
 	{
@@ -76,40 +60,28 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 	{
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		getActionBar().setDisplayShowTitleEnabled(false);
-		getActionBar().setDisplayShowHomeEnabled(false);
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) 
+	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
 
 		if(savedInstanceState != null)
-			u = (CWUser) savedInstanceState.get(Constants.BUNDLE_USER);
-
-		createProgressItem();
+			u = (User) savedInstanceState.get(Constants.BUNDLE_USER);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity());
 		username = prefs.getString(Constants.PREF_USERNAME, null);
 
 		if(username == null)
 			createAlertDialog();
-
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		getActionBar().setListNavigationCallbacks(listAdapter = new ListUserAdapter(getSherlockActivity(), new ArrayList<User>()), new OnNavigationListener() 
+		else
 		{
-			@Override
-			public boolean onNavigationItemSelected(int itemPosition, long itemId)
-			{
-				//					if(username != null && (u == null || getUserIndex(u.getUsername()) != itemPosition))
-				if(username != null)
-					createTask(listAdapter.getItem(itemPosition).getUsername(), false).execute();
-				return true;
-			}
-		});
+			String username = u == null ? this.username : u.getUsername();
+			//			CoderwallApiProvider.getClient().user(new UserAPIDelegate(LoadPolicy.ENABLED), username);
+			getLoaderManager().initLoader(0, getArguments(), this);
+		}
 
-		refreshNavigationListAdapter();
 	}
 
 	@Override
@@ -134,20 +106,9 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 
 		MenuItem refreshItem = menu.add(Menu.NONE, R.id.action_bar_refresh, 1, "Refresh");
 		refreshItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		refreshItem.setIcon(R.drawable.ic_menu_refresh);
 
-		if(refresh)
-			refreshItem.setActionView(flProgress);
-		else
-			refreshItem.setIcon(R.drawable.ic_menu_refresh);
-
-		if(username != null && u!= null && !username.equals(u.getUsername()))
-		{
-			menu.add(Menu.NONE, R.id.action_bar_delete, Menu.NONE, "Delete")
-			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		}
-
-		menu.add(Menu.NONE, R.id.action_bar_about, Menu.NONE, "About")
-		.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		this.refreshItem = refreshItem;
 	}
 
 	@Override
@@ -157,7 +118,7 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 		{	
 		case R.id.action_bar_refresh:
 			if(u != null)
-				createTask(u.getUsername(), true).execute();
+				executeTask(u.getUsername(), true);
 			break;
 		case R.id.action_bar_invite:
 			createAlertDialog();
@@ -170,12 +131,12 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 					"What am I supposed to do with these?! Demand to see life's manager! " +
 					"Make life rue the day it thought it could give Cave Johnson lemons! " +
 					"Do you know who I am? I'm the man who's gonna burn your house down! " +
-					"With the lemons! I'm gonna get my engineers to invent a combustible lemon that burns your house down! ")
+					"With the lemons! I'm gonna get my engineers to invent a combustible lemon that burns your house down!")
 					.setPositiveButton("Dev profile", new DialogInterface.OnClickListener() 
 					{
 						public void onClick(DialogInterface dialog, int whichButton) 
 						{
-							createTask("florianmski", true).execute();
+							executeTask("florianmski", true);
 						}
 					})
 					.setNeutralButton("Close", new DialogInterface.OnClickListener() 
@@ -183,80 +144,52 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 						public void onClick(DialogInterface dialog, int whichButton) {}
 					}).show();
 			break;
-		case R.id.action_bar_delete:
-			new File(Utils.getAPICacheFolderPath() + u.getUsername() + ".html").delete();
-			new File(Utils.getAPICacheFolderPath() + u.getUsername() + CWManager.FILE_FORMAT).delete();
-			createTask(username, false).execute();
-			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public GetUserProfileTask createTask(String username, boolean refreshFromWebOnly)
-	{
-		UserFragment.this.setRefresh(true);
-
-		if(task != null && task.isRunning())
-			task.cancel();
-
-		Log.e("username","username : "+username);
-
-		return task = new GetUserProfileTask(getSherlockActivity(), username, refreshFromWebOnly);
-	}
-
-	public void refreshNavigationListAdapter()
-	{
-		List<User> users = new ArrayList<User>();
-		File dir = new File(Utils.getAPICacheFolderPath());
-		if(dir.exists())
-		{
-			for(String s : dir.list(new FilenameFilter() 
-			{
-				@Override
-				public boolean accept(File dir, String filename) 
-				{
-					return filename.contains(CWManager.FILE_FORMAT);
-				}
-			}))
-			{
-				try 
-				{
-					users.add(ApiCache.readUserJsonFromCache(s.replace(CWManager.FILE_FORMAT, "")));
-				} 
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-
-		if(listAdapter == null)
-			listAdapter = new ListUserAdapter(getSherlockActivity(), users);
-		else
-			listAdapter.refreshItems(users);
-
-		if(u != null)
-			getActionBar().setSelectedNavigationItem(getUserIndex(u.getUsername()));
-	}
-
-	public void createProgressItem()
-	{
-		flProgress = new FrameLayout(getSherlockActivity());
-		ProgressBar pb = new ProgressBar(getSherlockActivity());
-		pb.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress));
-		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
-		lp.setMargins(px/2, px, px/2, px);
-		pb.setLayoutParams(lp);
-		flProgress.addView(pb);
-		flProgress.setClickable(true);
-		flProgress.setBackgroundResource(R.drawable.abs__item_background_holo_light);
+	public void executeTask(String username, boolean refresh)
+	{		
+		//TODO
+		//		LoadPolicy lp;
+		//		
+		//		if(refresh)
+		//		{
+		//			setRefresh(true);
+		//			if(u != null && !u.getUsername().equals(username))
+		//				lp = LoadPolicy.NETWORK_ENABLED;
+		//			else
+		//				lp = LoadPolicy.NEVER;
+		//		}
+		//		else
+		//			lp = LoadPolicy.ENABLED;
+		//		
+		//		CoderwallApiProvider.getClient().user(new UserAPIDelegate(lp), username);
 	}
 
 	public void setRefresh(boolean on)
 	{
-		this.refresh = on;
-		getSherlockActivity().invalidateOptionsMenu();
+		if(refreshItem == null)
+			return;
+
+		if(on)
+		{
+			// based on http://stackoverflow.com/questions/9731602/animated-icon-for-actionitem/9732235#9732235
+			LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			ImageView iv = (ImageView) inflater.inflate(R.layout.view_refresh, null);
+
+			Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.refresh);
+			rotation.setRepeatCount(Animation.INFINITE);
+			iv.startAnimation(rotation);
+
+			refreshItem.setActionView(iv);
+		}
+		else
+		{
+			if(refreshItem.getActionView() != null)
+				refreshItem.getActionView().clearAnimation();
+			refreshItem.setActionView(null);
+		}
 	}
 
 	public void createAlertDialog()
@@ -273,7 +206,7 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 		{
 			public void onClick(DialogInterface dialog, int whichButton) 
 			{
-				createTask(edtUsername.getText().toString().trim(), true).execute();
+				executeTask(edtUsername.getText().toString().trim(), true);
 			}
 		}).show();
 
@@ -286,72 +219,6 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 				return false;
 			}
 		});
-	}
-
-	private int getUserIndex(String username)
-	{
-		if(username != null)
-		{
-			int index = 0;
-			for(User user : listAdapter.getItems())
-			{
-				if(user.getUsername().toUpperCase().trim().equals(username.toUpperCase().trim()))
-					break;
-				index++;
-			}
-			return index;
-		}
-
-		return 0;
-	}
-
-	@Override
-	public void onDestroy()
-	{
-		super.onDestroy();
-		
-		if(task != null && task.isRunning())
-			task.cancel();
-	}
-
-	@Subscribe
-	public void onUserRetrieved(UserRetrievedEvent event)
-	{
-		CWUser u = event.getUser();
-
-		if(event.isTaskOver())
-			UserFragment.this.setRefresh(false);
-
-		if(event.getError() != null)
-		{
-			Toast.makeText(getSherlockActivity(), event.getError().getMessage(), Toast.LENGTH_LONG).show();
-			return;
-		}
-		else if(u == null)
-			return;
-
-		if(UserFragment.this.username == null)
-		{
-			UserFragment.this.username = u.getUsername();
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity());
-			prefs.edit().putString(Constants.PREF_USERNAME, u.getUsername()).commit();
-		}
-
-		UserFragment.this.u = u;
-		refreshNavigationListAdapter();
-
-		if(pagerAdapter == null || viewPager.getAdapter() == null)
-		{
-			viewPager.setAdapter(pagerAdapter = new PagerUserAdapter(getFragmentManager(), u));
-			pageIndicator.setViewPager(viewPager);
-			pageIndicator.setOnPageChangeListener(UserFragment.this);
-			pageIndicator.setBackgroundColor(getResources().getColor(R.color.coderwall_blue));
-			pageIndicator.setFooterColor(Color.WHITE);
-			pageIndicator.setFooterIndicatorStyle(IndicatorStyle.Triangle);
-			pageIndicator.setFooterLineHeight(0);
-		}
-		else
-			pagerAdapter.refreshUser(u);
 	}
 
 	@Override
@@ -369,5 +236,79 @@ public class UserFragment extends BaseFragment implements OnPageChangeListener
 		super.onSaveInstanceState(outState);
 
 		outState.putSerializable(Constants.BUNDLE_USER, u);
+	}
+
+	@Override
+	public Loader<User> onCreateLoader(int arg0, Bundle arg1) 
+	{
+		return new ProfileLoader(getActivity(), username);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<User> arg0, User user) 
+	{
+		if(user == null)
+			UserFragment.this.setRefresh(false);
+		else
+		{
+			UserFragment.this.setRefresh(false);
+
+			if(UserFragment.this.username == null)
+			{
+				UserFragment.this.username = u.getUsername();
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity());
+				prefs.edit().putString(Constants.PREF_USERNAME, u.getUsername()).commit();
+			}
+
+			UserFragment.this.u = u;
+
+			if(pagerAdapter == null || viewPager.getAdapter() == null)
+			{
+				viewPager.setAdapter(pagerAdapter = new PagerUserAdapter(getFragmentManager(), u));
+				pageIndicator.setViewPager(viewPager);
+				pageIndicator.setOnPageChangeListener(UserFragment.this);
+				pageIndicator.setBackgroundColor(getResources().getColor(R.color.coderwall_blue));
+				pageIndicator.setFooterColor(Color.WHITE);
+				pageIndicator.setFooterIndicatorStyle(IndicatorStyle.Triangle);
+				pageIndicator.setFooterLineHeight(0);
+			}
+			else
+				pagerAdapter.refreshUser(u);
+		}
+	}
+
+	@Override
+	public void onLoaderReset(Loader<User> arg0) {}
+
+	public static class ProfileLoader extends AsyncLoader<User>
+	{
+		private String username;
+
+		public ProfileLoader(Context context, String username) 
+		{
+			super(context);
+
+			this.username = username;
+		}
+
+		@Override
+		public User loadInBackground() 
+		{
+			User user;
+			try
+			{
+				user = CoderwallApiProvider.getClient().user(username);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				//TODO
+//				Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+				return null;
+			}
+
+			return user;
+		}
+
 	}
 }

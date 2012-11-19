@@ -1,4 +1,4 @@
-package com.florianmski.coderwall.widgets;
+package com.florianmski.coderwall.ui.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
