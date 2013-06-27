@@ -3,8 +3,7 @@ Coderwall-Android
 
 This is the source code of my Coderwall Android app https://play.google.com/store/apps/details?id=com.florianmski.coderwall
 
-This app allows you to view profiles available on coderwall, it will evolves when the API will become more complete.
-This is an unofficial app.
+This unofficial app allows you to view profiles available on Coderwall. It will evolve when the API becomes more complete.
 
 If you want to contribute, please do your pull on request on the dev branch.
 
