@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- menu ids -->
+    <item type="id" name="action_bar_search" />
+
+    <!-- tag ids-->
+    <item type="id" name="animation_in_progress" />
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Global colors -->
+    <color name="black_transparent">#4000</color>
+
+    <!-- Material colors -->
+    <color name="primary">#5DB2DE</color>
+    <color name="primaryDark">#26617F</color>
+    <color name="accent">#585858</color>
+</resources>
