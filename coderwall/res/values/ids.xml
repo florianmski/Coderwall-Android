@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <item name="action_bar_refresh" type="id"/>
-    <item name="action_bar_delete" type="id"/>
-    <item name="action_bar_invite" type="id"/>
-    <item name="action_bar_about" type="id"/>
-
-</resources>

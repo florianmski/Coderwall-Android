@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:cameraZoom="13"
+        app:mapType="satellite"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutUserInfos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.florianmski.coderwall.framework.ui.widgets.BezelImageView
+                android:id="@+id/imageViewGithub"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/github"
+                tools:visibility="visible"
+                android:visibility="gone"
+                app:maskDrawable="@drawable/circle_mask"
+                android:background="?android:selectableItemBackground" />
+
+            <com.florianmski.coderwall.framework.ui.widgets.BezelImageView
+                android:id="@+id/imageViewTwitter"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/twitter"
+                tools:visibility="visible"
+                android:visibility="gone"
+                app:maskDrawable="@drawable/circle_mask"
+                android:background="?android:selectableItemBackground" />
+
+            <com.florianmski.coderwall.framework.ui.widgets.BezelImageView
+                android:id="@+id/imageViewAvatar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                tools:background="@color/primary"
+                app:maskDrawable="@drawable/circle_mask" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            tools:text="Name"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Title"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

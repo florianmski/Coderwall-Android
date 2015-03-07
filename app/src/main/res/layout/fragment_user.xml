@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/accent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/keyline_margin"
+            style="?android:textAppearance"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_location_on_white_18dp"
+            android:drawableStart="@drawable/ic_location_on_white_18dp"
+            tools:text="Paris, France"/>
+
+        <TextView
+            android:id="@+id/work"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/keyline_margin"
+            style="?android:textAppearance"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_work_white_18dp"
+            android:drawableStart="@drawable/ic_work_white_18dp"
+            tools:text="Company"/>
+
+        <TextView
+            android:id="@+id/endorsements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/keyline_margin"
+            style="?android:textAppearance"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_thumb_up_white_18dp"
+            android:drawableStart="@drawable/ic_thumb_up_white_18dp"
+            tools:text="42"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/view_divider"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             tools:layout_height="2dp"
+             android:layout_marginLeft="@dimen/keyline_margin"
+             android:layout_marginRight="@dimen/keyline_margin"/>
+
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/keyline_margin_2"
+        style="?android:textAppearance"
+        tools:text="About"/>
+
+    <include layout="@layout/view_divider"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             tools:layout_height="2dp"
+             android:layout_marginLeft="@dimen/keyline_margin"
+             android:layout_marginRight="@dimen/keyline_margin"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="@dimen/keyline_margin"
+        android:clipToPadding="false"/>
+
+    <include layout="@layout/view_divider"
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             tools:layout_height="2dp"
+             android:layout_marginLeft="@dimen/keyline_margin"
+             android:layout_marginRight="@dimen/keyline_margin"/>
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1000dp"/>-->
+
+</LinearLayout>
